@@ -1,4 +1,6 @@
-require "active_support/core_ext/integer/time"
+# frozen_string_literal: true
+
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -53,7 +55,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -88,29 +90,14 @@ Rails.application.configure do
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
+    logger           = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  $global_address = Rails.application.credentials.email[:address]
-  $global_domain = Rails.application.credentials.email[:domain]
-  $global_user_name = Rails.application.credentials.email[:user_name]
-  $global_password = Rails.application.credentials.email[:password]
-
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-  :authentication => :plain,
-  :address => $global_address,
-  :port => 587,
-  :domain => $global_domain,
-  :user_name => $global_user_name,
-  :password => $global_password
-  }
-
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector

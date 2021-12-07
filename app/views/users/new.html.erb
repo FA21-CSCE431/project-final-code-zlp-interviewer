@@ -1,8 +1,16 @@
-<div id= "newmain">
-    <h3>New Interview</h3>
-</div>
+<h1>New Interview</h1>
+
+<table>
+  <tbody>
+    <% @admin.each do |a| %>
+      <tr>
+        <td><%= a.dateRange %></td>
+        <td><%= a.timeRange%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <%= render 'form', user: @user %>
 
-
-
+<%= link_to 'Back', users_path %>

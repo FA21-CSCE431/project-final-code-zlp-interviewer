@@ -1,4 +1,6 @@
+# frozen_string_literal: true
+
 class ApplicationMailer < ActionMailer::Base
-  default from: 'postmaster@aniruddhascsce412.xyz.mailgun.org'
+  default from: 'from@example.com'
   layout 'mailer'
 end

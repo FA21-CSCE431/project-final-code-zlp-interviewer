@@ -1,12 +1,10 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   root 'users#index'
-    
   resources :admins do
-    member do 
+    member do
       get :get_dates
-    end
-    collection do
-      get :destroy_users
     end
   end
   resources :users
