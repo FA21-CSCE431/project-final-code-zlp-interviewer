@@ -1,31 +1,34 @@
-#The controller for admin
-# frozen_string_literal: true
-
 class AdminsController < ApplicationController
-  # http_basic_authenticate_with name: "zlpadmin", password: "zlppassword"
+ 
+  $global_username = Rails.application.credentials.auth[:username]
+  $global_password = Rails.application.credentials.auth[:password]
+  http_basic_authenticate_with name: $global_username, password: $global_password
 
-  before_action :set_admin, only: %i[show edit update destroy]
+  before_action :set_admin, only: %i[ show edit update destroy ]
 
   # GET /admins or /admins.json
   def index
     @admins = Admin.all
     @users = User.all
+    respond_to do |format|
+      format.html
+      format.csv { send_data @admins.to_csv, filename: "admins-#{Date.today}.csv" }
+    end
   end
 
   # GET /admins/1 or /admins/1.json
-  def show; end
+  def show
+  end
 
   # GET /admins/new
   def new
     @admin = Admin.new
-    # @admins.each do |admin|
-    #  startDate = dateRange.split(/-/)[0]
-    #  endDate = dateRange.split(/-/)[1]
-    # end
+
   end
 
   # GET /admins/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /admins or /admins.json
   def create
@@ -33,7 +36,7 @@ class AdminsController < ApplicationController
 
     respond_to do |format|
       if @admin.save
-        format.html { redirect_to @admin, notice: 'Admin was successfully created.' }
+        format.html { redirect_to @admin }
         format.json { render :show, status: :created, location: @admin }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -46,7 +49,7 @@ class AdminsController < ApplicationController
   def update
     respond_to do |format|
       if @admin.update(admin_params)
-        format.html { redirect_to @admin, notice: 'Admin was successfully updated.' }
+        format.html { redirect_to @admin }
         format.json { render :show, status: :ok, location: @admin }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -59,24 +62,34 @@ class AdminsController < ApplicationController
   def destroy
     @admin.destroy
     respond_to do |format|
-      format.html { redirect_to admins_url, notice: 'Admin was successfully destroyed.' }
+      format.html { redirect_to admins_url }
       format.json { head :no_content }
     end
   end
-=begin
+
+  def destroy_users
+    User.destroy_all
+
+    respond_to do |format|
+      format.html { redirect_to admins_url }
+      format.json { head :no_content }
+    end
+  end
+
   def get_dates
-    dateRange.split(/-/) # returns dateRange as an array with start date as first element, end date as last
+    dateRange.split(/-/) # returns dateRange as an array with start date as first element, end date as last 
   end
-=end
+
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_admin
+      @admin = Admin.find(params[:id])
+    end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_admin
-    @admin = Admin.find(params[:id])
-  end
+    # Only allow a list of trusted parameters through.
+    def admin_params
+      params.require(:admin).permit(:scheduleName, :dateRange, :timeRange, :interviewLength, :numBreaks, :numRooms)
+    end
 
-  # Only allow a list of trusted parameters through.
-  def admin_params
-    params.require(:admin).permit(:scheduleName, :dateRange, :timeRange, :interviewLength, :numBreaks, :numRooms)
-  end
+
 end
