@@ -29,6 +29,8 @@ This code has been run and tested on:
 Download this code repository by using git:
 
 `git clone https://github.com/FA21-CSCE431/project-sprint-3-zlp-interviewer.git`
+ or 
+ `git clone https://github.com/FA21-CSCE431/project-final-code-zlp-interviewer/`
 
 ## Tests
 
